@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
-import { saveUserToDatabase } from "@/supabase/supabase.config";
+import { saveUserToDatabase } from "@/features/sageUserToDatabase";
 import Image from "next/image";
 
 export default function Home() {
