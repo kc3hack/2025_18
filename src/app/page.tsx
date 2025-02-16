@@ -1,6 +1,21 @@
+"use client";
+import { useEffect } from "react";
+import { useUser } from "@clerk/nextjs";
+import { saveUserToDatabase } from "@/supabase/supabase.config";
 import Image from "next/image";
 
 export default function Home() {
+
+  const { user } = useUser(); // 🔹 ここで useUser() を正しく使う
+  console.log(user)
+
+  useEffect(() => {
+    console.log("🟢 useEffect 実行！ユーザー情報:", user);
+
+    if (user) {
+      saveUserToDatabase(user); // 🔹 `user` を渡す
+    }
+  }, [user]);
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
