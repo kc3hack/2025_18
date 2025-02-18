@@ -7,7 +7,7 @@ export async function sentPost(
     judge:boolean,
     latitude:number,
     longitude:number,
-    user_id:string
+    user_id:string|null
 ) {
     try{
         const { data: urlData } = await supabase
