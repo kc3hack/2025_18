@@ -6,7 +6,8 @@ export async function sentPost(
     text:string|null,
     judge:boolean,
     latitude:number,
-    longitude:number
+    longitude:number,
+    user_id:string
 ) {
     try{
         const { data: urlData } = await supabase
@@ -24,7 +25,8 @@ export async function sentPost(
             image:imageUrl,
             judge:judge,
             latitude:latitude,
-            longitude:longitude
+            longitude:longitude,
+            user_id:user_id
         })
         if(error){console.log(error)}
     }
