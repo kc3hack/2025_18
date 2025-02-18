@@ -15,5 +15,5 @@ export async function receivePost(kansai:boolean){
     }
     catch(error){
         console.log(error);
-    }
+    };
 }
