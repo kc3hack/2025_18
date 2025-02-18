@@ -25,7 +25,6 @@ export default function Post() {
     };
     fetchid();
   },[]);
-  console.log("id",userId);
 
   const handleFileChange = (e: any) => {
     if (e.target.files.length !== 0) {
