@@ -14,6 +14,7 @@ export default function Post() {
   const [text, setText] = useState<string>("");
   const [judge, setJudge] = useState<boolean>(true);
   const [userId, setUserId] = useState<string|null>(null);
+  const [loading,setloading] = useState<boolean>(false);
 
 
   useEffect(()=>{
@@ -55,45 +56,51 @@ export default function Post() {
   };
 return (
     <div>
-      {/* タイトル入力 */}
-      <input
-        type="text"
-        placeholder="タイトルを入力"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
+      {loading?(
+        <p>loading</p>
+      ):(
+      <>
+        {/* タイトル入力 */}
+        <input
+          type="text"
+          placeholder="タイトルを入力"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
 
-      {/* テキスト入力 */}
-      <input
-        type="text"
-        placeholder="テキストを入力"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-      />
+        {/* テキスト入力 */}
+        <input
+          type="text"
+          placeholder="テキストを入力"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+        />
 
-      {/* 画像アップロード */}
-      <input type="file" accept="image/*" onChange={handleImageChange} />
+        {/* 画像アップロード */}
+        <input type="file" accept="image/*" onChange={handleImageChange} />
 
-      {/* プレビュー */}
-      {image && (
-        <div>
-          <p>選択した画像:</p>
-          <Image
-            src={URL.createObjectURL(image)}
-            alt="Preview"
-            width={200}
-            height={200}
-          />
-        </div>
+        {/* プレビュー */}
+        {image && (
+          <div>
+            <p>選択した画像:</p>
+            <Image
+              src={URL.createObjectURL(image)}
+              alt="Preview"
+              width={200}
+              height={200}
+            />
+          </div>
+        )}
+
+        {/* boolを切り替えるボタン */}
+        <button onClick={() => setJudge(!judge)}>
+          {judge ? "ON (true)" : "OFF (false)"}
+        </button>
+
+        {/* 送信ボタン */}
+        <button onClick={handlePost}>送信</button>
+      </>
       )}
-
-      {/* boolを切り替えるボタン */}
-      <button onClick={() => setJudge(!judge)}>
-        {judge ? "ON (true)" : "OFF (false)"}
-      </button>
-
-      {/* 送信ボタン */}
-      <button onClick={handlePost}>送信</button>
     </div>
   );
 }
