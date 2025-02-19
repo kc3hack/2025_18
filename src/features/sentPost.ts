@@ -28,7 +28,10 @@ export async function sentPost(
             longitude:longitude,
             user_id:user_id
         })
+        .select("id")
+        .single()
         if(error){console.log(error)}
+        return data?.id
     }
     catch(error){
         console.log("insert error",error)

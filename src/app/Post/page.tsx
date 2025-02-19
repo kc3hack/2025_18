@@ -6,6 +6,8 @@ import Image from "next/image";
 import { getDbUserId } from "@/features/getUserId";
 import { sentPost } from "@/features/sentPost";
 import { supabase } from "@/supabase/supabase.config";
+import { insertShare } from "@/features/insertShare";
+import { receivePost } from "@/features/receivePost";
 
 export default function Post() {
   const [image, setImage] = useState<File | null>(null);
@@ -43,16 +45,20 @@ export default function Post() {
     const { error } = await supabase.storage
       .from("PostImage") // 使用するSupabaseのストレージバケット名
       .upload(filePath, file);
-
     if (error) {
       console.error("画像のアップロードエラー:", error);
       return;
     }
   };
-
-  const handlePost = () => {
-    sentPost(title, text, filePath, judge, 1, 1,userId); // 画像URLを渡して投稿
-    console.log("imageUrl");
+  const handlePost =async () => {
+    const detailpost = await receivePost(!judge);
+    const sent_post_id = await sentPost(title, text, filePath, judge, 1, 1,userId); // 画像URLを渡して投稿
+    const receive_post_id = detailpost.id
+    // console.log("receivepostid",result);
+    // console.log("sentpostid",sent_post_id);
+    // console.log("imageUrl");
+    insertShare(userId,sent_post_id,receive_post_id);
+    setloading(false);
   };
 return (
     <div>
