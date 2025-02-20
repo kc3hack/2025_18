@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import { getDbUserId } from "@/features/getUserId";
 import { sentPost } from "@/features/sentPost";
@@ -9,100 +8,187 @@ import { supabase } from "@/supabase/supabase.config";
 import { insertShare } from "@/features/insertShare";
 import { receivePost } from "@/features/receivePost";
 
+let map: google.maps.Map;
+let geocoder: google.maps.Geocoder;
+let marker: google.maps.Marker;
+
+function initMap(setMapUrl: React.Dispatch<React.SetStateAction<string>>) {
+  map = new google.maps.Map(document.getElementById("map") as HTMLElement, {
+    center: { lat: 35.6895, lng: 139.6917 }, // 東京
+    zoom: 15,
+    gestureHandling: "greedy", // スマホ操作を最適化
+  });
+
+  geocoder = new google.maps.Geocoder();
+  marker = new google.maps.Marker({ map: map });
+
+  // 検索ボックスの設定
+  const input = document.getElementById("search-box") as HTMLInputElement;
+  if (input) {
+    const searchBox = new google.maps.places.SearchBox(input);
+
+    // マップ範囲を検索ボックスに反映
+    map.addListener("bounds_changed", () => {
+      const bounds = map.getBounds();
+      if (bounds) {
+        searchBox.setBounds(bounds);
+      }
+    });
+
+    searchBox.addListener("places_changed", () => {
+      const places = searchBox.getPlaces();
+      if (!places || places.length === 0) return;
+
+      const bounds = new google.maps.LatLngBounds();
+      places.forEach((place) => {
+        if (place.geometry && place.geometry.location) {
+          bounds.extend(place.geometry.location);
+        }
+      });
+      map.fitBounds(bounds);
+    });
+  }
+
+  // タップで住所取得
+  map.addListener("click", (event: google.maps.MapMouseEvent) => {
+    const latlng = event.latLng;
+    if (latlng) {
+      geocoder.geocode({ location: latlng }, (results, status) => {
+        if (status === "OK" && results && results.length > 0) {
+          const fulladdress = results[0].formatted_address;
+          const address = fulladdress.replace(/^日本、〒\d{3}-\d{4} /, "");
+          const fullMapUrl = `http://local.google.co.jp/maps?q=${encodeURIComponent(address)}`;
+          setMapUrl(fullMapUrl);
+          console.log(fullMapUrl);
+          marker.setPosition(latlng);
+        } else {
+          alert("住所を取得できませんでした。");
+        }
+      });
+    }
+  });
+}
+
 export default function Post() {
   const [image, setImage] = useState<File | null>(null);
-  const [filePath, setfilePath] = useState<string>(""); // 画像URLの状態を追加
+  const [filePath, setFilePath] = useState<string>(""); // 画像URLの状態を追加
   const [title, setTitle] = useState<string>("");
   const [text, setText] = useState<string>("");
   const [judge, setJudge] = useState<boolean>(true);
-  const [userId, setUserId] = useState<string|null>(null);
-  const [loading,setloading] = useState<boolean>(false);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [mapUrl, setMapUrl] = useState<string>("");
 
-
-  useEffect(()=>{
-    const fetchid = async()=>{
-        const id = await getDbUserId();
-        if (id){
-            setUserId(id);
-        }
+  useEffect(() => {
+    const fetchId = async () => {
+      const id = await getDbUserId();
+      if (id) {
+        setUserId(id);
+      }
     };
-    fetchid();
-  },[]);
 
-  const handleFileChange = (e: any) => {
-    if (e.target.files.length !== 0) {
-      setImage(e.target.files[0]);
-    }
-  };
+    // Google Maps APIのスクリプトを読み込む
+    const script = document.createElement("script");
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&libraries=places`;
+    script.async = true;
+    script.defer = true;
+    script.onload = () => {
+      initMap(setMapUrl); // API読み込み後に地図を初期化、setMapUrlを渡す
+      fetchId(); // ユーザーIDの取得
+    };
+
+    document.head.appendChild(script);
+
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, []);
 
   const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files || event.target.files.length === 0) {
       return; // 画像が選択されていない場合
     }
 
-    const file = event.target.files[0]; // 選択された画像を取得
-    const filePath = `postimage/${encodeURIComponent(file.name)}`; // 保存先のpathを指定
+    const file = event.target.files[0];
+    const newFilePath = `postimage/${encodeURIComponent(file.name)}`;
     const { error } = await supabase.storage
-      .from("PostImage") // 使用するSupabaseのストレージバケット名
-      .upload(filePath, file);
+      .from("PostImage")
+      .upload(newFilePath, file);
     if (error) {
       console.error("画像のアップロードエラー:", error);
       return;
     }
+    setFilePath(newFilePath);
+    setImage(file);
   };
-  const handlePost =async () => {
+
+  const handlePost = async () => {
+    setLoading(true);
     const detailpost = await receivePost(!judge);
-    const sent_post_id = await sentPost(title, text, filePath, judge, 1, 1,userId); // 画像URLを渡して投稿
-    const receive_post_id = detailpost.id
-    insertShare(userId,sent_post_id,receive_post_id);
-    setloading(false);
+    const sent_post_id = await sentPost(title, text, filePath, judge, mapUrl, userId);
+    const receive_post_id = detailpost.id;
+    insertShare(userId, sent_post_id, receive_post_id);
+    setLoading(false);
   };
-return (
+
+  return (
     <div>
-      {loading?(
+      {loading ? (
         <p>loading</p>
-      ):(
-      <>
-        {/* タイトル入力 */}
-        <input
-          type="text"
-          placeholder="タイトルを入力"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
+      ) : (
+        <>
+          {/* タイトル入力 */}
+          <input
+            type="text"
+            placeholder="タイトルを入力"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
 
-        {/* テキスト入力 */}
-        <input
-          type="text"
-          placeholder="テキストを入力"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-        />
+          {/* テキスト入力 */}
+          <input
+            type="text"
+            placeholder="テキストを入力"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+          />
 
-        {/* 画像アップロード */}
-        <input type="file" accept="image/*" onChange={handleImageChange} />
+          {/* 画像アップロード */}
+          <input type="file" accept="image/*" onChange={handleImageChange} />
 
-        {/* プレビュー */}
-        {image && (
-          <div>
-            <p>選択した画像:</p>
-            <Image
-              src={URL.createObjectURL(image)}
-              alt="Preview"
-              width={200}
-              height={200}
-            />
-          </div>
-        )}
+          {/* プレビュー */}
+          {image && (
+            <div>
+              <p>選択した画像:</p>
+              <Image
+                src={URL.createObjectURL(image)}
+                alt="Preview"
+                width={200}
+                height={200}
+              />
+            </div>
+          )}
 
-        {/* boolを切り替えるボタン */}
-        <button onClick={() => setJudge(!judge)}>
-          {judge ? "ON (true)" : "OFF (false)"}
-        </button>
+          {/* boolを切り替えるボタン */}
+          <button onClick={() => setJudge(!judge)}>
+            {judge ? "ON (true)" : "OFF (false)"}
+          </button>
 
-        {/* 送信ボタン */}
-        <button onClick={handlePost}>送信</button>
-      </>
+          {/* 検索ボックス */}
+          <input
+            id="search-box"
+            type="text"
+            placeholder="場所を検索"
+            style={{ margin: "10px 0", width: "100%" }}
+          />
+
+          {/* Google Map */}
+          <div id="map" style={{ height: "500px", width: "100%" }}></div>
+          
+
+          {/* 送信ボタン */}
+          <button onClick={handlePost}>送信</button>
+        </>
       )}
     </div>
   );

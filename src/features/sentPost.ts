@@ -5,8 +5,7 @@ export async function sentPost(
     title:string,
     text:string|null,
     judge:boolean,
-    latitude:number,
-    longitude:number,
+    mapurl:string,
     user_id:string|null
 ) {
     try{
@@ -24,8 +23,7 @@ export async function sentPost(
             text:text,
             image:imageUrl,
             judge:judge,
-            latitude:latitude,
-            longitude:longitude,
+            mapurl:mapurl,
             user_id:user_id
         })
         .select("id")
