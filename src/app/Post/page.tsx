@@ -41,7 +41,7 @@ export default function Post() {
     }
 
     const file = event.target.files[0]; // 選択された画像を取得
-    const filePath = `${encodeURIComponent(file.name)}`; // 保存先のpathを指定
+    const filePath = `postimage/${encodeURIComponent(file.name)}`; // 保存先のpathを指定
     const { error } = await supabase.storage
       .from("PostImage") // 使用するSupabaseのストレージバケット名
       .upload(filePath, file);
@@ -54,9 +54,6 @@ export default function Post() {
     const detailpost = await receivePost(!judge);
     const sent_post_id = await sentPost(title, text, filePath, judge, 1, 1,userId); // 画像URLを渡して投稿
     const receive_post_id = detailpost.id
-    // console.log("receivepostid",result);
-    // console.log("sentpostid",sent_post_id);
-    // console.log("imageUrl");
     insertShare(userId,sent_post_id,receive_post_id);
     setloading(false);
   };
