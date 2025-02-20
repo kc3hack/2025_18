@@ -19,6 +19,7 @@ function ToggleSwitch() {
         <div className='relative z-[100]'>
           <div className='absolute left-1/2 top-[50%] -translate-x-1/2 -translate-y-1/2 text-center'>
             <div className='flex h-[70px] w-[70px] items-center justify-center rounded-full bg-[#B69676] text-white absolute left-[-40px] top-[-12px]'>
+              <button>
               {/* SVG で + マークを作成（線を長くする） */}
               <svg
                 width='60' /* SVG自体のサイズを少し大きく */
@@ -34,6 +35,7 @@ function ToggleSwitch() {
                   strokeLinecap='round'
                 />
               </svg>
+              </button>
             </div>
           </div>
         </div>
