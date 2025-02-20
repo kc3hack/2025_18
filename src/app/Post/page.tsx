@@ -7,6 +7,7 @@ import { sentPost } from "@/features/sentPost";
 import { supabase } from "@/supabase/supabase.config";
 import { insertShare } from "@/features/insertShare";
 import { receivePost } from "@/features/receivePost";
+import { useRouter } from "next/navigation";
 
 let map: google.maps.Map;
 let geocoder: google.maps.Geocoder;
@@ -79,6 +80,8 @@ export default function Post() {
   const [loading, setLoading] = useState<boolean>(false);
   const [mapUrl, setMapUrl] = useState<string>("");
 
+  const router = useRouter();
+
   useEffect(() => {
     const fetchId = async () => {
       const id = await getDbUserId();
@@ -129,6 +132,7 @@ export default function Post() {
     const receive_post_id = detailpost.id;
     insertShare(userId, sent_post_id, receive_post_id);
     setLoading(false);
+    router.push("/")
   };
 
   return (
