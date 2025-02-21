@@ -114,6 +114,7 @@ export default function Post() {
 
     const file = event.target.files[0];
     const newFilePath = `postimage/${encodeURIComponent(file.name)}`;
+    console.log(newFilePath);
     const { error } = await supabase.storage
       .from("PostImage")
       .upload(newFilePath, file);
@@ -128,7 +129,7 @@ export default function Post() {
   const handlePost = async () => {
     setLoading(true);
     const detailpost = await receivePost(!judge);
-    const sent_post_id = await sentPost(title, text, filePath, judge, mapUrl, userId);
+    const sent_post_id = await sentPost(filePath, title, text, judge, mapUrl, userId);
     const receive_post_id = detailpost.id;
     insertShare(userId, sent_post_id, receive_post_id);
     setLoading(false);
