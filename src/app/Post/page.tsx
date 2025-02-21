@@ -15,7 +15,7 @@ let marker: google.maps.Marker;
 
 function initMap(setMapUrl: React.Dispatch<React.SetStateAction<string>>) {
   map = new google.maps.Map(document.getElementById("map") as HTMLElement, {
-    center: { lat: 35.6895, lng: 139.6917 }, // 東京
+    center: { lat: 34.99500, lng: 135.73833 }, // 京都リサーチパーク4号館
     zoom: 15,
     gestureHandling: "greedy", // スマホ操作を最適化
     disableDefaultUI: true
