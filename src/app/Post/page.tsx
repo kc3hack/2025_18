@@ -132,6 +132,7 @@ export default function Post() {
     const sent_post_id = await sentPost(filePath, title, text, judge, mapUrl, userId);
     const receive_post_id = detailpost.id;
     insertShare(userId, sent_post_id, receive_post_id);
+    console.log(sent_post_id,receive_post_id);
     setLoading(false);
     router.push("/")
   };
@@ -156,6 +157,7 @@ export default function Post() {
                 placeholder="タイトルを入力"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
+                className="w-[341px] h-[36px] rounded-[18px] border-[#9D7858] border p-2"
               />
             </div>
 
@@ -168,7 +170,18 @@ export default function Post() {
               >
               写真
               </label>
-              <input type="file" accept="image/*" onChange={handleImageChange} />
+              <div 
+                className="w-[341px] h-[20px] border p-5 text-center cursor-pointer rounded-[18px] border-[#9D7858] text-[#9D7858] font-bold text-[14px] flex items-center justify-center"
+                onClick={() => document.getElementById("fileInput")?.click()}
+              >写真のアップロード
+                <input 
+                  id="fileInput"
+                  type="file" 
+                  accept="image/*" 
+                  onChange={handleImageChange}
+                  className="hidden"
+                />
+              </div>
 
 
               {/* プレビュー */}
