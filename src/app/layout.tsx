@@ -8,6 +8,7 @@ import {
   SignedOut,
   UserButton
 } from '@clerk/nextjs'
+import { Toaster } from 'react-hot-toast'; // Toasterをインポート
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,13 +32,14 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          {children}
+          <Toaster /> {/* Toasterをここに追加 */}
+        </body>
+      </html>
     </ClerkProvider>
   );
 }
