@@ -140,59 +140,93 @@ export default function Post() {
       {loading ? (
         <p>loading</p>
       ) : (
-        <>
-          {/* タイトル入力 */}
-          <input
-            type="text"
-            placeholder="タイトルを入力"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-
-          {/* テキスト入力 */}
-          <input
-            type="text"
-            placeholder="テキストを入力"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-          />
-
-          {/* 画像アップロード */}
-          <input type="file" accept="image/*" onChange={handleImageChange} />
-
-          {/* プレビュー */}
-          {image && (
+        <div className="w-[370px] p-3 rounded-[20px] mx-auto my-[10%]">
+           <form className='space-y-4'>
+           {/* タイトル */}
             <div>
-              <p>選択した画像:</p>
-              <Image
-                src={URL.createObjectURL(image)}
-                alt="Preview"
-                width={200}
-                height={200}
+              <label
+                htmlFor='title'
+                className='block text-[#9D7858] text-[24px] mb-2 font-bold'
+              >
+                タイトル
+              </label>
+              <input
+                type="text"
+                placeholder="タイトルを入力"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
               />
             </div>
-          )}
 
-          {/* boolを切り替えるボタン */}
-          <button onClick={() => setJudge(!judge)}>
-            {judge ? "ON (true)" : "OFF (false)"}
-          </button>
 
-          {/* 検索ボックス */}
-          <input
-            id="search-box"
-            type="text"
-            placeholder="場所を検索"
-            style={{ margin: "10px 0", width: "100%" }}
-          />
+            {/* 画像アップロード */}
+            <div>
+              <label
+              htmlFor='photo'
+              className='block text-[14px] mb-2 font-bold text-[#9D7858]'
+              >
+              写真
+              </label>
+              <input type="file" accept="image/*" onChange={handleImageChange} />
 
-          {/* Google Map */}
-          <div id="map" style={{ height: "500px", width: "100%" }}></div>
-          
 
-          {/* 送信ボタン */}
-          <button onClick={handlePost}>送信</button>
-        </>
+              {/* プレビュー */}
+              {image && (
+                <div className="mt-4 relative w-full">
+                  <Image
+                    src={URL.createObjectURL(image)}
+                    alt="Preview"
+                    className="max-h-[200px] mx-auto object-contain rounded-md border shadow-md"
+                    width={300} //width,heightの指定が必須
+                    height={200} 
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* boolを切り替えるボタン */}
+            <button onClick={() => setJudge(!judge)}>
+              {judge ? "ON (true)" : "OFF (false)"}
+            </button>
+
+            {/* 検索ボックス */}
+            <input
+              id="search-box"
+              type="text"
+              placeholder="場所を検索"
+              style={{ margin: "10px 0", width: "100%" }}
+            />
+
+            {/* Google Map */}
+            <div id="map" className="w-4/5 mx-auto h-80 md:h-96 lg:h-[500px]"></div>
+
+            {/* テキスト入力 */}
+            <div>
+              <label
+              htmlFor='comment'
+              className='block text-[14px] mb-2 font-bold text-[#9D7858]'
+              >
+              コメント
+              </label>
+              <input
+                type="text"
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                className="w-[340px] h-[100px] border p-2 min-h-[95px] rounded-[18px]"
+              />
+            </div>
+            
+
+            {/* 送信ボタン */}
+            <div className="flex justify-center items-center">
+              <button
+                className='w-[178px] h-[50px] mx-auto bg-[#E8CF8F] text-white  text-[24px] font-bold rounded-full'
+                onClick={handlePost}>
+                  送信
+              </button>
+            </div>
+          </form>
+        </div>
       )}
     </div>
   );
