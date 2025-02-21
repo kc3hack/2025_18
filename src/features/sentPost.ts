@@ -5,9 +5,8 @@ export async function sentPost(
     title:string,
     text:string|null,
     judge:boolean,
-    latitude:number,
-    longitude:number,
-    user_id:string
+    mapurl:string,
+    user_id:string|null
 ) {
     try{
         const { data: urlData } = await supabase
@@ -16,6 +15,7 @@ export async function sentPost(
         .getPublicUrl(filePath);
 
         const imageUrl = urlData?.publicUrl;
+        console.log("imageurl",imageUrl)
 
         const {data,error} = await supabase
         .from("Post")
@@ -24,11 +24,13 @@ export async function sentPost(
             text:text,
             image:imageUrl,
             judge:judge,
-            latitude:latitude,
-            longitude:longitude,
+            mapurl:mapurl,
             user_id:user_id
         })
+        .select("id")
+        .single()
         if(error){console.log(error)}
+        return data?.id
     }
     catch(error){
         console.log("insert error",error)

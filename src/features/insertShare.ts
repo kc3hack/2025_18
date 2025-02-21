@@ -1,7 +1,7 @@
 import { supabase } from "@/supabase/supabase.config";
 
 export async function insertShare (
-    user_id:string,
+    user_id:string|null,
     sentpostid:number,
     receivepostid:number
 ){
