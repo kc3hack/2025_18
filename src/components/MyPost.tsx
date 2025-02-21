@@ -2,9 +2,12 @@
 
 import { getMyPost } from "@/features/getMyPost";
 import React, { useEffect, useState } from "react";
+import DetailPostCard from "./DetailPost";
 
 function MyPost() {
   const [posts, setPosts] = useState<any[]>([]); // 投稿データを保持
+  const [selectedPost, setSelectedPost] = useState<any | null>(null); // 選択された投稿
+  const [isModalOpen, setIsModalOpen] = useState(false); // モーダルの開閉状態
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -17,6 +20,17 @@ function MyPost() {
     fetchPosts();
   }, []);
 
+  // モーダルを開く
+  const openModal = (post: any) => {
+    setSelectedPost(post);
+    setIsModalOpen(true);
+  };
+
+  // モーダルを閉じる
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   if (posts.length === 0) return null; // 投稿がない場合は何も表示しない
 
   return (
@@ -24,11 +38,12 @@ function MyPost() {
       {posts.map((post) => (
         <div
           key={post.id}
-          className='w-[350px] h-[280px] rounded-[20px] overflow-hidden border border-[#9D7858] text-[#9D7858] font-semibold'
+          className='w-[350px] h-[280px] rounded-[20px] overflow-hidden border border-[#9D7858] text-[#9D7858] font-semibold cursor-pointer'
+          onClick={() => openModal(post)}
         >
           <div className='w-full h-[193px] bg-slate-200 overflow-hidden'>
             <img
-              src={post.image} // Supabaseに保存されている画像URL
+              src={`https://otypvnepeosuobpszuey.supabase.co/storage/v1/object/public/PostImage/${post.image}`}
               alt='Post Image'
               className='w-full h-full object-cover aspect-video z-10'
             />
@@ -43,6 +58,22 @@ function MyPost() {
           </div>
         </div>
       ))}
+
+      {/* 🔹 モーダル */}
+      {isModalOpen && selectedPost && (
+        <div
+          className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'
+          onClick={closeModal} // 外側クリックで閉じる
+        >
+          <div
+            className='relative'
+            onClick={(e) => e.stopPropagation()} // モーダルの中身をクリックしても閉じないようにする
+          >
+            {/* `DetailPostCard` をモーダル内で表示 */}
+            <DetailPostCard post={selectedPost} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
