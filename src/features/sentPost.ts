@@ -15,6 +15,7 @@ export async function sentPost(
         .getPublicUrl(filePath);
 
         const imageUrl = urlData?.publicUrl;
+        console.log("imageurl",imageUrl)
 
         const {data,error} = await supabase
         .from("Post")
