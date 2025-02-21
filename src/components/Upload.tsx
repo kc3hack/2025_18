@@ -38,7 +38,7 @@ export default function Page() {
           <input
             id='title'
             type='text'
-            className='w-[341px] h-[36px] rounded-[18px] border p-2'
+            className='w-[341px] h-[36px] rounded-[18px] border-[#9D7858] border p-2 '
           />
         </div>
 
@@ -54,7 +54,7 @@ export default function Page() {
           {/* アップロードボタン */}
           <div
             onClick={() => document.getElementById("photo")?.click()}
-            className='w-[341px] h-[67px]  border  p-8 text-center cursor-pointer  rounded-[18px] text-[#9D7858] font-bold text-[14px]'
+            className='w-[341px] h-[67px]  border  p-6 text-center cursor-pointer  rounded-[18px] border-[#9D7858] text-[#9D7858] font-bold text-[14px]'
           >
             写真をアップロード
           </div>
@@ -96,7 +96,7 @@ export default function Page() {
           </label>
           <textarea
             id='comment'
-            className='w-[341px] h-[156px] border p-2 min-h-[120px] rounded-[18px]'
+            className='w-[341px] h-[156px] border p-2 min-h-[120px] rounded-[18px] border-[#9D7858]'
           />
         </div>
       </form>
