@@ -8,6 +8,7 @@ import { supabase } from "@/supabase/supabase.config";
 import { insertShare } from "@/features/insertShare";
 import { receivePost } from "@/features/receivePost";
 import { useRouter } from "next/navigation";
+import { toast } from 'react-hot-toast';
 
 let map: google.maps.Map;
 let geocoder: google.maps.Geocoder;
@@ -127,8 +128,10 @@ export default function Post() {
     setImage(file);
   };
 
-  const handlePost = async () => {
-    if (text != "" && filePath != ""){
+  const handlePost = async (event: React.FormEvent) => {
+    event.preventDefault(); // フォーム送信のデフォルト動作を防止
+
+    if (title != "" && filePath != "" && mapUrl != ""){
       setLoading(true);
       const detailpost = await receivePost(!judge);
       const sent_post_id = await sentPost(filePath, title, text, judge, mapUrl, userId);
@@ -139,7 +142,7 @@ export default function Post() {
       router.push("/")
     }
     else{
-      console.log("success");
+      toast.error("タイトル、写真、場所の入力をしてください");
     }
   };
 
@@ -257,6 +260,7 @@ export default function Post() {
             {/* 送信ボタン */}
             <div className="flex justify-center items-center">
               <button
+                type="submit"
                 className="w-[178px] h-[50px] mx-auto bg-[#E8CF8F] text-white text-[24px] font-bold rounded-full"
                 onClick={handlePost}
               >
