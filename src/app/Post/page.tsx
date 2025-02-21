@@ -139,7 +139,8 @@ export default function Post() {
       insertShare(userId, sent_post_id, receive_post_id);
       console.log(sent_post_id,receive_post_id);
       setLoading(false);
-      router.push("/")
+      toast.success('交換成功！！', { removeDelay: 2000 });
+      router.push("/");
     }
     else{
       toast.error("タイトル、写真、場所の入力をしてください");
