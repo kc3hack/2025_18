@@ -15,9 +15,10 @@ let marker: google.maps.Marker;
 
 function initMap(setMapUrl: React.Dispatch<React.SetStateAction<string>>) {
   map = new google.maps.Map(document.getElementById("map") as HTMLElement, {
-    center: { lat: 35.6895, lng: 139.6917 }, // 東京
+    center: { lat: 34.99500, lng: 135.73833 }, // 京都リサーチパーク4号館
     zoom: 15,
     gestureHandling: "greedy", // スマホ操作を最適化
+    disableDefaultUI: true
   });
 
   geocoder = new google.maps.Geocoder();
@@ -127,14 +128,19 @@ export default function Post() {
   };
 
   const handlePost = async () => {
-    setLoading(true);
-    const detailpost = await receivePost(!judge);
-    const sent_post_id = await sentPost(filePath, title, text, judge, mapUrl, userId);
-    const receive_post_id = detailpost.id;
-    insertShare(userId, sent_post_id, receive_post_id);
-    console.log(sent_post_id,receive_post_id);
-    setLoading(false);
-    router.push("/")
+    if (text != "" && filePath != ""){
+      setLoading(true);
+      const detailpost = await receivePost(!judge);
+      const sent_post_id = await sentPost(filePath, title, text, judge, mapUrl, userId);
+      const receive_post_id = detailpost.id;
+      insertShare(userId, sent_post_id, receive_post_id);
+      console.log(sent_post_id,receive_post_id);
+      setLoading(false);
+      router.push("/")
+    }
+    else{
+      console.log("success");
+    }
   };
 
   return (
@@ -143,12 +149,12 @@ export default function Post() {
         <p>loading</p>
       ) : (
         <div className="w-[370px] p-3 rounded-[20px] mx-auto my-[10%]">
-           <form className='space-y-4'>
-           {/* タイトル */}
+          <form className="space-y-4">
+            {/* タイトル */}
             <div>
               <label
-                htmlFor='title'
-                className='block text-[#9D7858] text-[24px] mb-2 font-bold'
+                htmlFor="title"
+                className="block text-[#9D7858] text-[24px] mb-2 font-bold"
               >
                 タイトル
               </label>
@@ -160,30 +166,50 @@ export default function Post() {
                 className="w-[341px] h-[36px] rounded-[18px] border-[#9D7858] border p-2"
               />
             </div>
-
-
+  
+            {/* 関西判定 */}
+            <div>
+              <label className="block text-[14px] mb-2 font-bold text-[#9D7858]">
+                関西判定
+              </label>
+              <div className="flex justify-center items-center">
+                <label className="inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    className="sr-only peer"
+                    checked={judge}
+                    onChange={() => setJudge(!judge)}
+                  />
+                  <div className="relative w-11 h-6 bg-gray-300 peer-focus:ring-[#9D7858]/50 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#9D7858]"></div>
+                  <span className="ms-3 text-sm font-medium text-[#9D7858]">
+                    {judge ? "　関西　" : "関西以外"}
+                  </span>
+                </label>
+              </div>
+            </div>
+  
             {/* 画像アップロード */}
             <div>
               <label
-              htmlFor='photo'
-              className='block text-[14px] mb-2 font-bold text-[#9D7858]'
+                htmlFor="photo"
+                className="block text-[14px] mb-2 font-bold text-[#9D7858]"
               >
-              写真
+                写真
               </label>
-              <div 
+              <div
                 className="w-[341px] h-[20px] border p-5 text-center cursor-pointer rounded-[18px] border-[#9D7858] text-[#9D7858] font-bold text-[14px] flex items-center justify-center"
                 onClick={() => document.getElementById("fileInput")?.click()}
-              >写真のアップロード
-                <input 
+              >
+                写真のアップロード
+                <input
                   id="fileInput"
-                  type="file" 
-                  accept="image/*" 
+                  type="file"
+                  accept="image/*"
                   onChange={handleImageChange}
                   className="hidden"
                 />
               </div>
-
-
+  
               {/* プレビュー */}
               {image && (
                 <div className="mt-4 relative w-full">
@@ -191,52 +217,50 @@ export default function Post() {
                     src={URL.createObjectURL(image)}
                     alt="Preview"
                     className="max-h-[200px] mx-auto object-contain rounded-md border shadow-md"
-                    width={300} //width,heightの指定が必須
-                    height={200} 
+                    width={300} // width, heightの指定が必須
+                    height={200}
                   />
                 </div>
               )}
             </div>
-
-            {/* boolを切り替えるボタン */}
-            <button onClick={() => setJudge(!judge)}>
-              {judge ? "ON (true)" : "OFF (false)"}
-            </button>
-
-            {/* 検索ボックス */}
-            <input
-              id="search-box"
-              type="text"
-              placeholder="場所を検索"
-              style={{ margin: "10px 0", width: "100%" }}
-            />
-
-            {/* Google Map */}
-            <div id="map" className="w-4/5 mx-auto h-80 md:h-96 lg:h-[500px]"></div>
-
-            {/* テキスト入力 */}
+  
+            {/* コメント */}
             <div>
               <label
-              htmlFor='comment'
-              className='block text-[14px] mb-2 font-bold text-[#9D7858]'
+                htmlFor="comment"
+                className="block text-[14px] mb-2 font-bold text-[#9D7858] border-[#9D7858]"
               >
-              コメント
+                コメント
               </label>
               <input
                 type="text"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                className="w-[340px] h-[100px] border p-2 min-h-[95px] rounded-[18px]"
+                className="w-[340px] h-[100px] border p-2 min-h-[95px] rounded-[18px] border-[#9D7858]"
               />
             </div>
-            
-
+  
+            {/* 検索ボックス */}
+            <label className="block text-[14px] mb-2 font-bold text-[#9D7858] border-[#9D7858]">場所</label>
+            <div className="relative w-4/5 mx-auto h-80 md:h-96 lg:h-[500px]">
+              <input
+                id="search-box"
+                type="text"
+                placeholder="場所を検索"
+                className="absolute top-3 left-1/2 transform -translate-x-1/2 w-3/4 bg-white p-2 rounded-lg shadow-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 z-10"
+              />
+  
+              {/* Google Map */}
+              <div id="map" className="w-full h-full"></div>
+            </div>
+  
             {/* 送信ボタン */}
             <div className="flex justify-center items-center">
               <button
-                className='w-[178px] h-[50px] mx-auto bg-[#E8CF8F] text-white  text-[24px] font-bold rounded-full'
-                onClick={handlePost}>
-                  送信
+                className="w-[178px] h-[50px] mx-auto bg-[#E8CF8F] text-white text-[24px] font-bold rounded-full"
+                onClick={handlePost}
+              >
+                送信
               </button>
             </div>
           </form>
@@ -244,4 +268,5 @@ export default function Post() {
       )}
     </div>
   );
+  
 }
