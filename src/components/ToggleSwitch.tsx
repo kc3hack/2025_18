@@ -1,11 +1,14 @@
+import { useUser } from "@clerk/nextjs";
 import { useState } from "react";
 
 function ToggleSwitch() {
   const [activeTab, setActiveTab] = useState<"your" | "other">("your");
+  const { user } = useUser();
+  if (!user) return null;
 
   return (
     <div className='w-full relative'>
-      <h2 className='mb-4 text-center text-[32px] font-semibold '>UserName</h2>
+      <h2 className='mb-4 text-center text-[32px] font-semibold '>{user.fullName}</h2>
       <div className='relative flex items-center justify-center w-full'>
         <button
           onClick={() => setActiveTab("your")}
