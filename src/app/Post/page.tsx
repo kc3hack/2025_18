@@ -128,14 +128,19 @@ export default function Post() {
   };
 
   const handlePost = async () => {
-    setLoading(true);
-    const detailpost = await receivePost(!judge);
-    const sent_post_id = await sentPost(filePath, title, text, judge, mapUrl, userId);
-    const receive_post_id = detailpost.id;
-    insertShare(userId, sent_post_id, receive_post_id);
-    console.log(sent_post_id,receive_post_id);
-    setLoading(false);
-    router.push("/")
+    if (text != "" && filePath != ""){
+      setLoading(true);
+      const detailpost = await receivePost(!judge);
+      const sent_post_id = await sentPost(filePath, title, text, judge, mapUrl, userId);
+      const receive_post_id = detailpost.id;
+      insertShare(userId, sent_post_id, receive_post_id);
+      console.log(sent_post_id,receive_post_id);
+      setLoading(false);
+      router.push("/")
+    }
+    else{
+      console.log("success");
+    }
   };
 
   return (
