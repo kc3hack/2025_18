@@ -6,6 +6,7 @@ export async function sentComment(
     user_id:string,
     filePath:string
 ) {
+    console.log("投稿できてるー")
     try{
         const { data: urlData } = await supabase
         .storage
@@ -16,13 +17,16 @@ export async function sentComment(
         console.log("imageurl",imageUrl)
 
         const {data,error} = await supabase
-        .from("Post")
+        .from("Comment")
         .insert({
             comment:comment,
             post_id:post_id,
             user_id:user_id,
             reply_image:filePath
         })
+        if (error){
+            console.log(error);
+        }
     }
     catch(error){
         console.log("insert error",error)
