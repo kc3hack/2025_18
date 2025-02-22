@@ -38,12 +38,12 @@ function OtherPost() {
           (
             <div
               key={post.id}
-              className='w-[350px] h-[280px] rounded-[20px] overflow-hidden border border-[#9D7858] text-[#9D7858] font-semibold cursor-pointer'
+              className='mx-auto w-[350px] h-[280px] rounded-[20px] overflow-hidden border border-[#9D7858] text-[#9D7858] font-semibold cursor-pointer'
               onClick={() => openModal(post)} // モーダルを開く
             >
               <div className='w-full h-[193px] bg-slate-200 overflow-hidden'>
                 <img
-                  src={`https://otypvnepeosuobpszuey.supabase.co/storage/v1/object/public/PostImage/${post.image}`}
+                  src={post.image}
                   alt='Post Image'
                   className='w-full h-full object-cover aspect-video z-10'
                 />
@@ -60,8 +60,8 @@ function OtherPost() {
                       "Unknown user"}
                   </p>
                 </div>
-                <a href={post.mapurl} className='text-[16px] text-[#9D7858]'>
-                  📍{post.title}の場所はこちら
+                <a className='text-[16px] text-[#9D7858]'>
+                  📍{post.mapname}
                 </a>
               </div>
             </div>

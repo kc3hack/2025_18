@@ -34,7 +34,7 @@ function MyPost() {
   if (posts.length === 0) return null; // 投稿がない場合は何も表示しない
 
   return (
-    <div className="">
+    <div className="z-[100]">
       <div className='space-y-6'>
         {posts.map((post) => (
           <div
