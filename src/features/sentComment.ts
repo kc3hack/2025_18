@@ -22,7 +22,7 @@ export async function sentComment(
             comment:comment,
             post_id:post_id,
             user_id:user_id,
-            reply_image:filePath
+            reply_image:imageUrl
         })
         if (error){
             console.log(error);
