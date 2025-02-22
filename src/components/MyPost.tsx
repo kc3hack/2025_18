@@ -34,30 +34,32 @@ function MyPost() {
   if (posts.length === 0) return null; // 投稿がない場合は何も表示しない
 
   return (
-    <div className='space-y-6'>
-      {posts.map((post) => (
-        <div
-          key={post.id}
-          className='w-[350px] h-[280px] rounded-[20px] overflow-hidden border border-[#9D7858] text-[#9D7858] font-semibold cursor-pointer'
-          onClick={() => openModal(post)}
-        >
-          <div className='w-full h-[193px] bg-slate-200 overflow-hidden'>
-            <img
-              src={`https://otypvnepeosuobpszuey.supabase.co/storage/v1/object/public/PostImage/${post.image}`}
-              alt='Post Image'
-              className='w-full h-full object-cover aspect-video z-10'
-            />
+    <div className="">
+      <div className='space-y-6'>
+        {posts.map((post) => (
+          <div
+            key={post.id}
+            className='mx-auto w-[350px] h-[280px] rounded-[20px] overflow-hidden border border-[#9D7858] text-[#9D7858] font-semibold cursor-pointer'
+            onClick={() => openModal(post)}
+          >
+            <div className='w-full h-[193px] bg-slate-200 overflow-hidden'>
+              <img
+                src={post.image}
+                alt='Post Image'
+                className='w-full h-full object-cover aspect-video z-10'
+              />
+            </div>
+            <div className='w-full h-[87px] p-3'>
+              <p className='text-[24px] mb-2 ml-2 font-semibold text-[#9D7858]'>
+                {post.title}
+              </p>
+              <a href={post.mapurl} className='text-[16px] text-[#9D7858]'>
+                📍{post.title}の場所はこちら
+              </a>
+            </div>
           </div>
-          <div className='w-full h-[87px] p-3'>
-            <p className='text-[24px] mb-2 ml-2 font-semibold text-[#9D7858]'>
-              {post.title}
-            </p>
-            <a href={post.mapurl} className='text-[16px] text-[#9D7858]'>
-              📍{post.title}の場所はこちら
-            </a>
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
 
       {/* 🔹 モーダル */}
       {isModalOpen && selectedPost && (
