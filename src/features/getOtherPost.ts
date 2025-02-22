@@ -14,8 +14,26 @@ export async function getOtherPost() {
       throw new Error(`Shareテーブルのデータ取得エラー: ${shareError.message}`);
     }
 
+    // Share にデータがない場合
     if (!shareData || shareData.length === 0) {
-      throw new Error("指定されたuserIdに関連するShareデータが見つかりません");
+      console.warn(
+        "🟡 Shareデータがないため、他のユーザーの投稿を取得します。"
+      );
+
+      // 他のユーザーの投稿を取得（自分の投稿を除外）
+      const { data: otherPosts, error: otherPostError } = await supabase
+        .from("Post")
+        .select("*")
+        .neq("user_id", userId) // 自分の投稿を除外
+        .limit(10); // 必要なら制限を追加
+
+      if (otherPostError) {
+        throw new Error(
+          `他のユーザーの投稿取得エラー: ${otherPostError.message}`
+        );
+      }
+
+      return otherPosts; // 自分の投稿しかない場合は、他のユーザーの投稿を返す
     }
 
     // 複数のreceive_post_idを取得
@@ -31,6 +49,26 @@ export async function getOtherPost() {
 
     if (postError) {
       throw new Error(`Postテーブルのデータ取得エラー: ${postError.message}`);
+    }
+
+    // もし `postData` が空だった場合も、他のユーザーの投稿を取得
+    if (!postData || postData.length === 0) {
+      console.warn(
+        "🟡 自分の投稿しかないため、他のユーザーの投稿を取得します。"
+      );
+
+      const { data: otherPosts, error: otherPostError } = await supabase
+        .from("Post")
+        .select("*")
+        .neq("user_id", userId); // 自分の投稿を除外
+
+      if (otherPostError) {
+        throw new Error(
+          `他のユーザーの投稿取得エラー: ${otherPostError.message}`
+        );
+      }
+
+      return otherPosts;
     }
 
     return postData; // 取得した投稿データを返す（自分の投稿は含まれない）
