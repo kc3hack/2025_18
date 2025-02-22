@@ -1,4 +1,12 @@
+import { useRouter } from "next/navigation";
+
 function OtherDetailPost({ post }: { post: any }) {
+  const router = useRouter();
+
+  const openPost = (postId: number) => {
+    router.push(`comment?postId=${postId}`)
+  };
+
   return (
     <div className='w-[370px] border border-[#9D7858] rounded-[20px] bg-white p-4'>
       {/* Header */}
@@ -43,10 +51,13 @@ function OtherDetailPost({ post }: { post: any }) {
       </div>
 
       {/* Comments */}
-      <div className='w-[350px] mx-auto'>
-        <p className='text-sm text-[#9D7858] p-1 font-semibold'>
-          {post.text || "コメントがありません"}
-        </p>
+      <div className="flex justify-center items-center mt-1">
+        <button 
+          className='w-[178px] h-[50px] bg-[#E8CF8F] text-white  text-[24px] font-bold rounded-full'
+          onClick={()=>openPost(post.id)}
+          >
+          Reply
+        </button>
       </div>
     </div>
   );
