@@ -1,8 +1,6 @@
 "use server";
 import { supabase } from "@/supabase/supabase.config";
 import { getDbUserId } from "./getUserId";
-
-// userIdに関連する複数のPostデータを取得する関数
 export async function getOtherPost() {
   const userId = await getDbUserId();
   try {
@@ -24,16 +22,18 @@ export async function getOtherPost() {
     const receivePostIds = shareData.map((share) => share.receive_post_id);
 
     // Postテーブルから複数のreceive_post_idに一致するデータを取得
+    // ただし、自分の投稿（user_id === userId）は除外
     const { data: postData, error: postError } = await supabase
       .from("Post")
       .select("*")
-      .in("id", receivePostIds); // receive_post_idの配列を使ってフィルタリング
+      .in("id", receivePostIds)
+      .neq("user_id", userId); // 自分の投稿を除外
 
     if (postError) {
       throw new Error(`Postテーブルのデータ取得エラー: ${postError.message}`);
     }
 
-    return postData; // 取得した複数のPostデータを返す
+    return postData; // 取得した投稿データを返す（自分の投稿は含まれない）
   } catch (error) {
     console.error(error);
     return null; // エラー時はnullを返す
