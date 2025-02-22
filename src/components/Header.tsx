@@ -20,7 +20,7 @@ function Header() {
         </div>
         <div className='flex justify-center items-center w-full h-full'>
           {/* Image container */}
-          <div className='z-[100] w-[175px] h-[175px] rounded-full bg-gray-200'>
+          <div className='z-[10] w-[175px] h-[175px] rounded-full bg-gray-200'>
             <img
               src={user.imageUrl}
               alt='User Avatar'
