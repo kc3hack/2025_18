@@ -53,7 +53,7 @@ function MyPost() {
               <p className='text-[24px] mb-2 ml-2 font-semibold text-[#9D7858]'>
                 {post.title}
               </p>
-              <p className='text-[16px] text-[#9D7858]'>
+              <p className='text-[16px] text-[#9D7858] truncate block max-w-[350px] whitespace-nowrap'>
                 📍{post.mapname}
               </p>
             </div>
