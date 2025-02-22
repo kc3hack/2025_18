@@ -72,7 +72,7 @@ function OtherPost() {
       {/* モーダル表示部分 */}
       {isModalOpen && selectedPost && (
         <div
-          className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'
+          className='z-[100] fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'
           onClick={closeModal} // 外側をクリックすると閉じる
         >
           <div

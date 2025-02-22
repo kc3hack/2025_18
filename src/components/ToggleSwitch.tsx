@@ -9,13 +9,13 @@ function ToggleSwitch() {
   if (!user) return null;
 
   return (
-    <div className='w-full relative'>
+    <div className='z-[90] w-full relative'>
       <h2 className='mb-6 text-center text-[32px] font-semibold'>
         {user.fullName}
       </h2>
       {/* 🔹 タブ切り替え部分 */}
       <div className='relative flex flex-col items-center w-full'>
-        <div className='z-[1] relative flex items-center justify-center w-full'>
+        <div className='z-[98] relative flex items-center justify-center w-full'>
           <button
             onClick={() => setActiveTab("your")}
             className={`relative text-[20px] font-semibold py-2 text-center transition-colors text-black
@@ -25,9 +25,9 @@ function ToggleSwitch() {
             Your
           </button>
 
-          <div className='z-[2] relative'>
-            <div className='absolute left-1/2 top-[50%] -translate-x-1/2 -translate-y-1/2 text-center'>
-              <div className='flex h-[70px] w-[70px] items-center justify-center rounded-full bg-[#B69676] text-white absolute left-[-40px] top-[-12px]'>
+          <div className='relative'>
+            <div className='z-[99] absolute flex justify-center items-center text-center'>
+              <div className='flex h-[70px] w-[70px] justify-center items-center rounded-full bg-[#B69676] text-white absolute top-[-12px]'>
                 <button>
                   <a href='/Post'>
                     <svg
@@ -52,7 +52,7 @@ function ToggleSwitch() {
 
           <button
             onClick={() => setActiveTab("other")}
-            className={`z-[1] relative text-[20px] font-semibold py-2 text-center transition-colors text-black
+            className={`z-[98] relative text-[20px] font-semibold py-2 text-center transition-colors text-black
             border-b-4 w-[50%] border-[#E8CF8F] 
             ${activeTab === "other" ? "text-[#8B6E4F]" : "text-[#D3B594]"}`}
           >

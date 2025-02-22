@@ -34,7 +34,7 @@ function MyPost() {
   if (posts.length === 0) return null; // 投稿がない場合は何も表示しない
 
   return (
-    <div className="z-[100]">
+    <div className="">
       <div className='space-y-6'>
         {posts.map((post) => (
           <div
@@ -64,7 +64,7 @@ function MyPost() {
       {/* 🔹 モーダル */}
       {isModalOpen && selectedPost && (
         <div
-          className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'
+          className='z-[100] fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'
           onClick={closeModal} // 外側クリックで閉じる
         >
           <div

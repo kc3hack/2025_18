@@ -3,8 +3,9 @@ import { useUser } from "@clerk/nextjs";
 function Header() {
   const { user } = useUser();
   if (!user) return null;
+
   return (
-    <div className='w-full  flex flex-col items-center mx-auto'>
+    <div className='w-full flex flex-col items-center mx-auto'>
       <div className='relative w-[440px] h-[217px]'>
         {/* Background container */}
         <div className='absolute inset-0 bg-[#E8CF8F]'>
@@ -17,12 +18,15 @@ function Header() {
             }}
           />
         </div>
-        <div className='absolute left-1/2 top-[59%] -translate-x-1/2 -translate-y-1/2 z-20 w-[175px] h-[175px] rounded-full bg-gray-200'>
-          <img
-            src={user.imageUrl}
-            alt='User Avatar'
-            className='w-full rounded-full'
-          />
+        <div className='flex justify-center items-center w-full h-full'>
+          {/* Image container */}
+          <div className='z-[100] w-[175px] h-[175px] rounded-full bg-gray-200'>
+            <img
+              src={user.imageUrl}
+              alt='User Avatar'
+              className='w-full h-full object-cover rounded-full'
+            />
+          </div>
         </div>
       </div>
     </div>
