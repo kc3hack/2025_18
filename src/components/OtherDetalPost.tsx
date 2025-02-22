@@ -25,7 +25,7 @@ function OtherDetailPost({ post }: { post: any }) {
       <div className='flex justify-center'>
         <div className='aspect-video w-[100%] bg-blue-100'>
           <img
-            src={`https://otypvnepeosuobpszuey.supabase.co/storage/v1/object/public/PostImage/${post.image}`}
+            src={post.image}
             alt='Post Image'
             className='w-full h-full object-cover aspect-video z-10'
           />
@@ -38,7 +38,7 @@ function OtherDetailPost({ post }: { post: any }) {
           href={post.mapurl}
           className='text-[#9D7858] font-semibold text-[16px]'
         >
-          📍 {post.title}の場所はこちら
+          📍 場所はこちら
         </a>
       </div>
 

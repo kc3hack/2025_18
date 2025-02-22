@@ -5,7 +5,7 @@ function DetailPostCard({ post }: { post: any }) {
   if (!user) return null;
 
   return (
-    <div className='w-[370px] border border-[#9D7858] rounded-[20px] bg-white p-4'>
+    <div className='z-100 w-[370px] border border-[#9D7858] rounded-[20px] bg-white p-4'>
       {/* Header */}
       <div className='flex items-center gap-2 p-2'>
         {/* userのicon */}
@@ -43,7 +43,7 @@ function DetailPostCard({ post }: { post: any }) {
           href={post.mapurl}
           className='text-[#9D7858] font-semibold text-[16px]'
         >
-          📍 {post.title}の場所はこちら
+          📍 場所はこちら
         </a>
       </div>
 

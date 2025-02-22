@@ -53,9 +53,9 @@ function MyPost() {
               <p className='text-[24px] mb-2 ml-2 font-semibold text-[#9D7858]'>
                 {post.title}
               </p>
-              <a href={post.mapurl} className='text-[16px] text-[#9D7858]'>
-                📍{post.title}の場所はこちら
-              </a>
+              <p className='text-[16px] text-[#9D7858] truncate block max-w-[350px] whitespace-nowrap'>
+                📍{post.mapname}
+              </p>
             </div>
           </div>
         ))}
@@ -64,7 +64,7 @@ function MyPost() {
       {/* 🔹 モーダル */}
       {isModalOpen && selectedPost && (
         <div
-          className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'
+          className='z-[100] fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'
           onClick={closeModal} // 外側クリックで閉じる
         >
           <div

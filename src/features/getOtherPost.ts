@@ -1,8 +1,6 @@
 "use server";
 import { supabase } from "@/supabase/supabase.config";
 import { getDbUserId } from "./getUserId";
-
-// userIdに関連する複数のPostデータを取得する関数
 export async function getOtherPost() {
   const userId = await getDbUserId();
   try {
@@ -16,24 +14,64 @@ export async function getOtherPost() {
       throw new Error(`Shareテーブルのデータ取得エラー: ${shareError.message}`);
     }
 
+    // Share にデータがない場合
     if (!shareData || shareData.length === 0) {
-      throw new Error("指定されたuserIdに関連するShareデータが見つかりません");
+      console.warn(
+        "🟡 Shareデータがないため、他のユーザーの投稿を取得します。"
+      );
+
+      // 他のユーザーの投稿を取得（自分の投稿を除外）
+      const { data: otherPosts, error: otherPostError } = await supabase
+        .from("Post")
+        .select("*")
+        .neq("user_id", userId) // 自分の投稿を除外
+        .limit(10); // 必要なら制限を追加
+
+      if (otherPostError) {
+        throw new Error(
+          `他のユーザーの投稿取得エラー: ${otherPostError.message}`
+        );
+      }
+
+      return otherPosts; // 自分の投稿しかない場合は、他のユーザーの投稿を返す
     }
 
     // 複数のreceive_post_idを取得
     const receivePostIds = shareData.map((share) => share.receive_post_id);
 
     // Postテーブルから複数のreceive_post_idに一致するデータを取得
+    // ただし、自分の投稿（user_id === userId）は除外
     const { data: postData, error: postError } = await supabase
       .from("Post")
       .select("*")
-      .in("id", receivePostIds); // receive_post_idの配列を使ってフィルタリング
+      .in("id", receivePostIds)
+      .neq("user_id", userId); // 自分の投稿を除外
 
     if (postError) {
       throw new Error(`Postテーブルのデータ取得エラー: ${postError.message}`);
     }
 
-    return postData; // 取得した複数のPostデータを返す
+    // もし `postData` が空だった場合も、他のユーザーの投稿を取得
+    if (!postData || postData.length === 0) {
+      console.warn(
+        "🟡 自分の投稿しかないため、他のユーザーの投稿を取得します。"
+      );
+
+      const { data: otherPosts, error: otherPostError } = await supabase
+        .from("Post")
+        .select("*")
+        .neq("user_id", userId); // 自分の投稿を除外
+
+      if (otherPostError) {
+        throw new Error(
+          `他のユーザーの投稿取得エラー: ${otherPostError.message}`
+        );
+      }
+
+      return otherPosts;
+    }
+
+    return postData; // 取得した投稿データを返す（自分の投稿は含まれない）
   } catch (error) {
     console.error(error);
     return null; // エラー時はnullを返す
