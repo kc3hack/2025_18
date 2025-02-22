@@ -53,9 +53,9 @@ function MyPost() {
               <p className='text-[24px] mb-2 ml-2 font-semibold text-[#9D7858]'>
                 {post.title}
               </p>
-              <a href={post.mapurl} className='text-[16px] text-[#9D7858]'>
-                📍{post.title}の場所はこちら
-              </a>
+              <p className='text-[16px] text-[#9D7858]'>
+                📍{post.mapname}
+              </p>
             </div>
           </div>
         ))}

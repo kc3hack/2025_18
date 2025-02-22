@@ -43,7 +43,7 @@ function DetailPostCard({ post }: { post: any }) {
           href={post.mapurl}
           className='text-[#9D7858] font-semibold text-[16px]'
         >
-          📍 {post.title}の場所はこちら
+          📍 場所はこちら
         </a>
       </div>
 
