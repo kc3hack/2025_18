@@ -46,7 +46,7 @@ function OtherDetailPost({ post }: { post: any }) {
       </div>
 
       {/* 画像 */}
-      <div className='flex justify-center'>
+      <div className='flex justify-center mb-4'>
         <div className='aspect-video w-[100%] bg-blue-100'>
           <img
             src={post.image}

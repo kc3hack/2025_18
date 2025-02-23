@@ -74,7 +74,7 @@ function MyPost() {
       {isModalOpen && selectedPost && (
         <div
         
-          className='z-[100] fixed inset-0 bg-black bg-opacity-50 flex justify-center items-start overflow-y-auto'
+          className='z-[100] fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center overflow-y-auto'
           onClick={closeModal} // 外側クリックで閉じる
         >
           <div
