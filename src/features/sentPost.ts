@@ -6,6 +6,7 @@ export async function sentPost(
     text:string|null,
     judge:boolean,
     mapurl:string,
+    mapname:string,
     user_id:string|null
 ) {
     try{
@@ -25,6 +26,7 @@ export async function sentPost(
             image:imageUrl,
             judge:judge,
             mapurl:mapurl,
+            mapname:mapname,
             user_id:user_id
         })
         .select("id")

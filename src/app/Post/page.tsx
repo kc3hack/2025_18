@@ -14,7 +14,7 @@ let map: google.maps.Map;
 let geocoder: google.maps.Geocoder;
 let marker: google.maps.Marker;
 
-function initMap(setMapUrl: React.Dispatch<React.SetStateAction<string>>) {
+function initMap(setMapUrl: React.Dispatch<React.SetStateAction<string>>,setJpaddress: React.Dispatch<React.SetStateAction<string>>) {
   map = new google.maps.Map(document.getElementById("map") as HTMLElement, {
     center: { lat: 34.99500, lng: 135.73833 }, // 京都リサーチパーク4号館
     zoom: 15,
@@ -62,6 +62,7 @@ function initMap(setMapUrl: React.Dispatch<React.SetStateAction<string>>) {
           const address = fulladdress.replace(/^日本、〒\d{3}-\d{4} /, "");
           const fullMapUrl = `http://local.google.co.jp/maps?q=${encodeURIComponent(address)}`;
           setMapUrl(fullMapUrl);
+          setJpaddress(address);
           console.log(fullMapUrl);
           marker.setPosition(latlng);
         } else {
@@ -81,6 +82,7 @@ export default function Post() {
   const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [mapUrl, setMapUrl] = useState<string>("");
+  const [jpaddress , setJpaddress] = useState<string>("");
 
   const router = useRouter();
 
@@ -98,7 +100,7 @@ export default function Post() {
     script.async = true;
     script.defer = true;
     script.onload = () => {
-      initMap(setMapUrl); // API読み込み後に地図を初期化、setMapUrlを渡す
+      initMap(setMapUrl,setJpaddress); // API読み込み後に地図を初期化、setMapUrlを渡す
       fetchId(); // ユーザーIDの取得
     };
 
@@ -134,7 +136,7 @@ export default function Post() {
     if (title != "" && filePath != "" && mapUrl != ""){
       setLoading(true);
       const detailpost = await receivePost(!judge);
-      const sent_post_id = await sentPost(filePath, title, text, judge, mapUrl, userId);
+      const sent_post_id = await sentPost(filePath, title, text, judge, mapUrl, jpaddress, userId);
       const receive_post_id = detailpost.id;
       insertShare(userId, sent_post_id, receive_post_id);
       console.log(sent_post_id,receive_post_id);
