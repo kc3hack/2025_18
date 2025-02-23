@@ -13,11 +13,14 @@ export default function Home() {
   console.log(user)
 
   useEffect(() => {
-    console.log("🟢 useEffect 実行！ユーザー情報:", user);
-    if (user) {
-      saveUserToDatabase(user); // 🔹 `user` を渡す
+    const savefunc = async ()=>{
+      console.log("🟢 useEffect 実行！ユーザー情報:", user);
+      if (user) {
+        await saveUserToDatabase(user); // 🔹 `user` を渡す
+      }
     }
-  }, []);
+    savefunc();
+  }, [user]);
   return (
     <>
       <Header></Header>
