@@ -35,7 +35,7 @@ export default function Comment(){
         }
     
         const file = event.target.files[0];
-        const newFilePath = `replyimage/${encodeURIComponent(file.name)}`;
+        const newFilePath = `replyimage/${userId}/${encodeURIComponent(file.name)}`;
         console.log(newFilePath);
         const { error } = await supabase.storage
           .from("PostImage")
