@@ -1,4 +1,28 @@
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useUser } from "@clerk/nextjs";
+import { getDbUserId } from "@/features/getUserId";
+import { judgeComment } from "@/features/judgeComment";
+
 function OtherDetailPost({ post }: { post: any }) {
+
+  const [commentdata,setCommentdata] = useState<any[]|null>();
+  const [times,setTimes] = useState<boolean>(true);
+  const router = useRouter();
+  const { user } = useUser(); // 🔹 ここで useUser() を正しく使う
+
+  const openPost = (postId: number) => {
+    router.push(`comment?postId=${postId}`)
+  };
+  useEffect(()=>{
+    const fetchdata = async() =>{
+      const id = await getDbUserId()
+      const comment = await judgeComment(post.id,id);
+      setTimes(comment);
+    }
+    fetchdata();
+  },[])
+
   return (
     <div className='w-[370px] border border-[#9D7858] rounded-[20px] bg-white p-4'>
       {/* Header */}
@@ -22,7 +46,7 @@ function OtherDetailPost({ post }: { post: any }) {
       </div>
 
       {/* 画像 */}
-      <div className='flex justify-center'>
+      <div className='flex justify-center mb-4'>
         <div className='aspect-video w-[100%] bg-blue-100'>
           <img
             src={post.image}
@@ -41,12 +65,20 @@ function OtherDetailPost({ post }: { post: any }) {
           📍 場所はこちら
         </a>
       </div>
-
-      {/* Comments */}
-      <div className='w-[350px] mx-auto'>
+      <div className='w-[340px] mx-auto'>
         <p className='text-sm text-[#9D7858] p-1 font-semibold'>
           {post.text || "コメントがありません"}
         </p>
+      </div>
+
+      <div className="flex justify-center items-center mt-1">
+        <button 
+          className={`w-[178px] h-[50px] bg-[#E8CF8F] text-white text-[24px] font-bold rounded-full ${times ? 'opacity-50 cursor-not-allowed' : ''}`}
+          onClick={() => openPost(post.id)}
+          disabled={times} // times が true のときボタンを無効化
+        >
+          Reply
+        </button>
       </div>
     </div>
   );

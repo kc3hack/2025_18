@@ -24,12 +24,21 @@ function MyPost() {
   const openModal = (post: any) => {
     setSelectedPost(post);
     setIsModalOpen(true);
+    document.body.style.overflow = "hidden"; // 🔹 背景スクロール無効化
   };
 
   // モーダルを閉じる
   const closeModal = () => {
     setIsModalOpen(false);
+    document.body.style.overflow = "auto"; // 🔹 背景スクロール復活
   };
+
+  useEffect(() => {
+    return () => {
+      // 🔹 コンポーネントがアンマウントされたときにスクロール復活
+      document.body.style.overflow = "auto";
+    };
+  }, []);
 
   if (posts.length === 0) return null; // 投稿がない場合は何も表示しない
 
@@ -64,7 +73,8 @@ function MyPost() {
       {/* 🔹 モーダル */}
       {isModalOpen && selectedPost && (
         <div
-          className='z-[100] fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'
+        
+          className='z-[100] fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center overflow-y-auto'
           onClick={closeModal} // 外側クリックで閉じる
         >
           <div
