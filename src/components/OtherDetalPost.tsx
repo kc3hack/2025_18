@@ -49,8 +49,12 @@ function OtherDetailPost({ post }: { post: any }) {
           📍 場所はこちら
         </a>
       </div>
+      <div className='w-[340px] mx-auto'>
+        <p className='text-sm text-[#9D7858] p-1 font-semibold'>
+          {post.text || "コメントがありません"}
+        </p>
+      </div>
 
-      {/* Comments */}
       <div className="flex justify-center items-center mt-1">
         <button 
           className='w-[178px] h-[50px] bg-[#E8CF8F] text-white  text-[24px] font-bold rounded-full'

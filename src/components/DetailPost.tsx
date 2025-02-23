@@ -77,6 +77,12 @@ function DetailPostCard({ post }: { post: any }) {
         </a>
       </div>
 
+      <div className='w-[340px] mx-auto'>
+        <p className='text-sm text-[#9D7858] p-1 font-semibold mx-auto'>
+          {post.text || "コメントがありません"}
+        </p>
+      </div>
+
       <div className="w-[80%] h-[3px] bg-[#E8CF8F] mt-6 mx-auto"></div>
 
       <div className="w-[350px] mx-auto space-y-6">
