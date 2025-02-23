@@ -19,6 +19,7 @@ export default function Comment(){
 
     const router = useRouter();
     useEffect(() => {
+      toast("1投稿につき1コメントのみ可能です",{duration:2000});
         const fetchId = async () => {
           const id = await getDbUserId();
           if (id) {
@@ -58,6 +59,7 @@ export default function Comment(){
           toast.error("すべて入力してください");
         }
       };
+    
   return (
         <div className="w-[370px] p-3 rounded-[20px] mx-auto my-[10%]">
           <form className="space-y-4">
