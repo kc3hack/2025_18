@@ -2,10 +2,8 @@
 import { useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import { saveUserToDatabase } from "@/features/saveUserToDatabase";
-import Image from "next/image";
 import Header from "@/components/Header";
 import ToggleSwitch from "@/components/ToggleSwitch";
-import toast from "react-hot-toast";
 
 export default function Home() {
 
