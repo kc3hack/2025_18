@@ -9,18 +9,18 @@ import toast from "react-hot-toast";
 
 export default function Home() {
 
-  const { user } = useUser(); // 🔹 ここで useUser() を正しく使う
+  const { user, isLoaded } = useUser(); // 🔹 ここで useUser() を正しく使う
   console.log(user)
 
   useEffect(() => {
     const savefunc = async ()=>{
       console.log("🟢 useEffect 実行！ユーザー情報:", user);
-      if (user) {
+      if (isLoaded) {
         await saveUserToDatabase(user); // 🔹 `user` を渡す
       }
     }
     savefunc();
-  }, [user]);
+  }, [user,isLoaded]);
   return (
     <>
       <Header></Header>
