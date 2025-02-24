@@ -20,9 +20,9 @@ export default function Home() {
     savefunc();
   }, [user,isLoaded]);
   return (
-    <>
+    <div className="bg-white">
       <Header></Header>
       <ToggleSwitch></ToggleSwitch>
-    </>
+    </div>
   );
 }
