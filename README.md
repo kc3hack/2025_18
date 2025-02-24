@@ -1,4 +1,4 @@
-# 関シェア
+# 関シェア！
 <!-- プロダクト名に変更してください -->
 
 ![関シェア](https://kc3.me/cms/wp-content/uploads/2024/11/hack25-eyecatch.png)
