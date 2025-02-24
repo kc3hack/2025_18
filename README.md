@@ -43,7 +43,7 @@ Googleログインの後、画面中央の+ボタンを押して投稿、投稿�
 ### その他
 投稿に対してのコメントを1度きりにすることで、旅にはつきものの一期一会を再現
 ## 使用技術
-Next.js Supabase Clerk
+Next.js Supabase Clerk GoogleMapAPI
 <!-- 使用技術を入力してください -->
 
 
