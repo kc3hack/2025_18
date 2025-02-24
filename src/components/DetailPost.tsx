@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { getComment } from "@/features/getComment";
 import { getUserIcon } from "@/features/getUserIcon";
 
-function DetailPostCard({ post }: { post: any }) {
+function DetailPostCard({ post, onClose }: { post: any; onClose: () => void }) {
   const { user } = useUser();
   if (!user) return null;
 
@@ -16,9 +16,8 @@ function DetailPostCard({ post }: { post: any }) {
       if (reply_data != null && reply_data != undefined) {
         setReplys(reply_data);
 
-        // 各返信のユーザーアイコンとユーザーネームを取得
         const userIconPromises = reply_data.map(async (reply: any) => {
-          const userData = await getUserIcon(reply.user_id); // ユーザー情報を取得
+          const userData = await getUserIcon(reply.user_id);
           return { userId: reply.user_id, ...userData };
         });
 
@@ -31,14 +30,22 @@ function DetailPostCard({ post }: { post: any }) {
           return acc;
         }, {});
 
-        setUserIcons(iconDataMap); // アイコンとユーザーネームを設定
+        setUserIcons(iconDataMap);
       }
     };
     fetchdata();
   }, [post.id]);
 
   return (
-    <div className='z-100 w-[370px] border border-[#9D7858] rounded-[20px] bg-white p-4'>
+    <div className='relative z-100 w-[370px] border border-[#9D7858] rounded-[20px] bg-white p-4'>
+      {/* バツボタン（右上・大きく） */}
+      <button
+        className='absolute top-3 right-3 text-3xl p-2 cursor-pointer opacity-60'
+        onClick={onClose} // モーダルを閉じる処理
+      >
+        ✕
+      </button>
+
       {/* Header */}
       <div className='flex items-center gap-2 p-2'>
         {/* userのicon */}
@@ -49,7 +56,8 @@ function DetailPostCard({ post }: { post: any }) {
             className='w-full h-full object-cover'
           />
         </div>
-        <div>
+
+        <div className='flex flex-col'>
           <div className='text-sm text-[#9D7858] font-semibold'>
             {user.fullName}
           </div>
@@ -93,7 +101,6 @@ function DetailPostCard({ post }: { post: any }) {
           <div key={reply.id}>
             <div className='flex items-center gap-2 p-2 mb-1'>
               <div className='h-[35px] w-[35px] rounded-full bg-blue-300 overflow-hidden'>
-                {/* ユーザーのアイコン */}
                 <img
                   src={userIcons[reply.user_id]?.icon || "/default-avatar.png"}
                   alt='User Avatar'
@@ -102,7 +109,6 @@ function DetailPostCard({ post }: { post: any }) {
               </div>
               <div>
                 <div className='text-sm text-[#9D7858] font-semibold'>
-                  {/* ユーザーの名前 */}
                   {userIcons[reply.user_id]?.username || "Unknown User"}
                 </div>
               </div>
@@ -118,12 +124,9 @@ function DetailPostCard({ post }: { post: any }) {
                 />
               </div>
             </div>
-            {/* <div className="flex justify-center items-center mt-3 text-sm text-[#9D7858] font-semibold max-w-[300px] whitespace-normal mx-auto">
-              <p className="mx-auto">{replys[index].comment}</p>
-            </div> */}
             <div className='w-[340px] mx-auto'>
               <p className='text-sm text-[#9D7858] p-1 font-semibold mx-auto'>
-              {replys[index].comment}
+                {replys[index].comment}
               </p>
             </div>
           </div>
