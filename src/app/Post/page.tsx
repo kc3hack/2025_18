@@ -117,7 +117,7 @@ export default function Post() {
     }
 
     const file = event.target.files[0];
-    const newFilePath = `postimage/${userId}/${encodeURIComponent(file.name)}`;
+    const newFilePath = `postimage/${encodeURIComponent(file.name)}`;
     console.log(newFilePath);
     const { error } = await supabase.storage
       .from("PostImage")
@@ -154,7 +154,7 @@ export default function Post() {
       {loading ? (
         <p>loading</p>
       ) : (
-        <div className="w-[370px] p-3 rounded-[20px] mx-auto my-[10%]">
+        <div className="w-full h-full p-3 rounded-[20px] mb-[10%] bg-white">
           <form className="space-y-4">
             {/* タイトル */}
             <div>
