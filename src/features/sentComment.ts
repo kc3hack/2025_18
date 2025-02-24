@@ -10,7 +10,7 @@ export async function sentComment(
     try{
         const { data: urlData } = await supabase
         .storage
-        .from('Comment')
+        .from('PostImage')
         .getPublicUrl(filePath);
 
         const imageUrl = urlData?.publicUrl;

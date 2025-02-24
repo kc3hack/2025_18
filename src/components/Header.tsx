@@ -6,7 +6,7 @@ function Header() {
 
   return (
     <div className='w-full flex flex-col items-center mx-auto'>
-      <div className='relative w-[440px] h-[217px]'>
+      <div className='relative w-full h-[217px]'>
         {/* Background container */}
         <div className='absolute inset-0 bg-[#E8CF8F]'>
           {/* Curved white overlay */}

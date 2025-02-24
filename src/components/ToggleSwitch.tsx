@@ -9,12 +9,12 @@ function ToggleSwitch() {
   if (!user) return null;
 
   return (
-    <div className='z-[90] w-full relative'>
+    <div className='z-[90] w-full h-full relative bg-white'>
       <h2 className='mb-6 text-center text-[32px] font-semibold'>
         {user.fullName}
       </h2>
       {/* 🔹 タブ切り替え部分 */}
-      <div className='relative flex flex-col items-center w-full'>
+      <div className='relative flex flex-col items-center w-full h-full mx-auto'>
         <div className='z-[98] relative flex items-center justify-center w-full'>
           <button
             onClick={() => setActiveTab("your")}
