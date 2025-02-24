@@ -24,18 +24,18 @@ function MyPost() {
   const openModal = (post: any) => {
     setSelectedPost(post);
     setIsModalOpen(true);
-    document.body.style.overflow = "hidden"; // 🔹 背景スクロール無効化
+    document.body.style.overflow = "hidden"; // 背景スクロール無効化
   };
 
   // モーダルを閉じる
   const closeModal = () => {
     setIsModalOpen(false);
-    document.body.style.overflow = "auto"; // 🔹 背景スクロール復活
+    document.body.style.overflow = "auto"; // 背景スクロール復活
   };
 
   useEffect(() => {
     return () => {
-      // 🔹 コンポーネントがアンマウントされたときにスクロール復活
+      // コンポーネントがアンマウントされたときにスクロール復活
       document.body.style.overflow = "auto";
     };
   }, []);
@@ -43,7 +43,7 @@ function MyPost() {
   if (posts.length === 0) return null; // 投稿がない場合は何も表示しない
 
   return (
-    <div className="">
+    <div className=''>
       <div className='space-y-6'>
         {posts.map((post) => (
           <div
@@ -70,10 +70,9 @@ function MyPost() {
         ))}
       </div>
 
-      {/* 🔹 モーダル */}
+      {/* モーダル */}
       {isModalOpen && selectedPost && (
         <div
-        
           className='z-[100] fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center overflow-y-auto'
           onClick={closeModal} // 外側クリックで閉じる
         >
@@ -81,8 +80,8 @@ function MyPost() {
             className='relative'
             onClick={(e) => e.stopPropagation()} // モーダルの中身をクリックしても閉じないようにする
           >
-            {/* `DetailPostCard` をモーダル内で表示 */}
-            <DetailPostCard post={selectedPost} />
+            {/* `DetailPostCard` に `onClose` を渡す */}
+            <DetailPostCard post={selectedPost} onClose={closeModal} />
           </div>
         </div>
       )}

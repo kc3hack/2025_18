@@ -1,5 +1,6 @@
 'use client';
-import { useEffect, useState, useRef } from "react";
+
+import { useEffect, useState, Suspense, useRef } from "react";
 import { supabase } from "@/supabase/supabase.config";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -8,8 +9,8 @@ import { getDbUserId } from "@/features/getUserId";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 
-export default function Comment(){
-    const [filePath, setFilePath] = useState<string>("");
+function CommentContent(){
+    const [filePath, setFilePath] = useState<string>(""); // 画像URLの状態を追加
     const [image, setImage] = useState<File | null>(null);
     const [comment, setComment] = useState<string>("");
     const [userId, setUserId] = useState<string | null>(null);
@@ -133,5 +134,13 @@ export default function Comment(){
             </div>
           </form>
         </div>
+  );
+}
+
+export default function Comment() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CommentContent />
+    </Suspense>
   );
 }

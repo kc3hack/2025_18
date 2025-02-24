@@ -1,7 +1,6 @@
 "use client";
 import { fetchPostsWithUser } from "@/features/fetchPostsWithUser"; // ユーザー情報付き投稿を取得
 import React, { useEffect, useState } from "react";
-import DetailPostCard from "./DetailPost";
 import OtherDetailPost from "./OtherDetalPost";
 
 function OtherPost() {
@@ -54,18 +53,12 @@ function OtherPost() {
                     <p className='text-[24px] ml-2 font-semibold text-[#9D7858] whitespace-nowrap'>
                       {post.title}
                     </p>
-                    {/* 投稿の作成者の名前を表示 */}
-                    {/* <p className='font-semibold text-[#E8CF8F] mb-2 ml-2 mr-1 whitespace-nowrap'>
-                      {post.user?.fullName ||
-                        post.user?.full_name ||
-                        "Unknown user"}
-                    </p> */}
                   </div>
                   <p className='font-semibold text-xs text-[#E8CF8F] ml-2 mr-1 whitespace-nowrap'>
-                      {post.user?.fullName ||
-                        post.user?.full_name ||
-                        "Unknown user"}
-                    </p>
+                    {post.user?.fullName ||
+                      post.user?.full_name ||
+                      "Unknown user"}
+                  </p>
                   <a className='text-[16px] text-[#9D7858] truncate block max-w-[350px] whitespace-nowrap'>
                     📍{post.mapname}
                   </a>
@@ -86,8 +79,8 @@ function OtherPost() {
               className='relative'
               onClick={(e) => e.stopPropagation()} // モーダル内のクリックで閉じないように
             >
-              {/* 投稿詳細をモーダル内に表示 */}
-              <OtherDetailPost post={selectedPost} />
+              {/* `onClose` を渡してバツボタンを機能させる */}
+              <OtherDetailPost post={selectedPost} onClose={closeModal} />
             </div>
           </div>
         )}
