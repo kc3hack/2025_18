@@ -117,7 +117,7 @@ export default function Post() {
     }
 
     const file = event.target.files[0];
-    const newFilePath = `postimage/${encodeURIComponent(file.name)}`;
+    const newFilePath = `postimage/${userId}/${encodeURIComponent(file.name)}`;
     console.log(newFilePath);
     const { error } = await supabase.storage
       .from("PostImage")

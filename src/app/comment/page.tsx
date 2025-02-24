@@ -1,5 +1,6 @@
 'use client';
-import { useEffect, useState, Suspense } from "react";
+
+import { useEffect, useState, Suspense, useRef } from "react";
 import { supabase } from "@/supabase/supabase.config";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -18,8 +19,9 @@ function CommentContent(){
     const postId = Number(searchParams.get("postId"));
 
     const router = useRouter();
+    const toastShown = useRef(false); // トースト表示済みかどうかを管理
+
     useEffect(() => {
-      toast("1投稿につき1コメントのみ可能です",{duration:2000});
         const fetchId = async () => {
           const id = await getDbUserId();
           if (id) {
@@ -27,15 +29,21 @@ function CommentContent(){
           }
         };
         fetchId();
-    },[])
+
+        // まだ表示していなければ、トーストを表示
+        if (!toastShown.current) {
+            toast("1投稿につき1コメントのみ可能です", { duration: 2000 });
+            toastShown.current = true;
+        }
+    }, []);
 
     const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         if (!event.target.files || event.target.files.length === 0) {
-          return; // 画像が選択されていない場合
+          return;
         }
     
         const file = event.target.files[0];
-        const newFilePath = `replyimage/${encodeURIComponent(file.name)}`;
+        const newFilePath = `replyimage/${userId}/${encodeURIComponent(file.name)}`;
         console.log(newFilePath);
         const { error } = await supabase.storage
           .from("PostImage")
@@ -46,19 +54,19 @@ function CommentContent(){
         }
         setFilePath(newFilePath);
         setImage(file);
-      };
-      const handlePost = async (event: React.FormEvent) => {
-        event.preventDefault(); // フォーム送信のデフォルト動作を防止
+    };
+
+    const handlePost = async (event: React.FormEvent) => {
+        event.preventDefault();
     
-        if (comment != "" && filePath && userId != null){
-            sentComment(comment,postId,userId,filePath)
-          toast.success('送信完了！！', { removeDelay: 2000 });
-          router.push("/");
+        if (comment !== "" && filePath && userId !== null){
+            sentComment(comment, postId, userId, filePath);
+            toast.success('送信完了！！', { removeDelay: 2000 });
+            router.push("/");
+        } else {
+            toast.error("すべて入力してください");
         }
-        else{
-          toast.error("すべて入力してください");
-        }
-      };
+    };
     
   return (
         <div className="w-[370px] p-3 rounded-[20px] mx-auto my-[10%]">
@@ -93,7 +101,7 @@ function CommentContent(){
                     src={URL.createObjectURL(image)}
                     alt="Preview"
                     className="max-h-[200px] mx-auto object-contain rounded-md border shadow-md"
-                    width={300} // width, heightの指定が必須
+                    width={300}
                     height={200}
                   />
                 </div>
@@ -127,7 +135,6 @@ function CommentContent(){
           </form>
         </div>
   );
-  
 }
 
 export default function Comment() {
